@@ -38,6 +38,9 @@ shuts down. If your task does not complete within the config
 Note ``BACKGROUND_TASK_SHUTDOWN_TIMEOUT`` should ideally be less than
 any server shutdown timeout.
 
+Unique task names will be generated unless to pass the optional `name` parameter.
+The task name can afterwards be accessed via [`Task.get_name()`](TODO).
+
 Synchronous background tasks are supported and will run in a separate
 thread.
 
