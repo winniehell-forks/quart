@@ -72,3 +72,15 @@ async def test_sync_background_task() -> None:
         await test_client.get("/")
 
     assert data == "data"
+
+
+async def test_background_task_with_name() -> None:
+    app = Quart(__name__)
+    event = asyncio.Event()
+
+    async def background() -> None:
+        await event.wait()
+
+    app.add_background_task(background, name="my-task-name")
+    assert [task.get_name() for task in app.background_tasks] == ["my-task-name"]
+    event.set()
