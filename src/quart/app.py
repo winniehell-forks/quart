@@ -1375,7 +1375,7 @@ class Quart(App):
         request.body.set_result(request_body)
         return self.request_context(request)
 
-    def add_background_task(self, func: Callable, name: str | None = None, *args: Any, **kwargs: Any) -> None:
+    def add_background_task(self, func: Callable, name: str | None = None, *args: Any, **kwargs: Any) -> asyncio.Task:
         async def _wrapper() -> None:
             async with self.app_context() as ctx:
                 try:
@@ -1386,6 +1386,7 @@ class Quart(App):
         task = asyncio.get_event_loop().create_task(_wrapper(), name=name)
         self.background_tasks.add(task)
         task.add_done_callback(self.background_tasks.discard)
+        return task
 
     async def handle_background_exception(
         self, ctx: AppContext, error: Exception
